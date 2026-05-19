@@ -1487,11 +1487,11 @@ class TraktScrobble(TraktBase):
         }
 
         if data['mode'] == 'movies':
-            payload['movie'] = {'ids': {'tmdb': data['ids']['tmdb_id']}}
+            payload['movie'] = {'ids': {'tmdb': int(data['ids']['tmdb_id'])}}
         elif data['mode'] == 'tv':
             if data.get('tv_data') is None:
                 return None
-            payload['show'] = {'ids': {'tmdb': data['ids']['tmdb_id']}}
+            payload['show'] = {'ids': {'tmdb': int(data['ids']['tmdb_id'])}}
             payload['episode'] = {
                 'season': data.get('tv_data').get('season'),
                 'number': data.get('tv_data').get('episode'),

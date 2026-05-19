@@ -405,6 +405,8 @@ class MagnetoPlayer:
 	def _trakt_stop(self, data):
 		try:
 			if not self._trakt_active: return
+			if data.get('progress', 0.0) < 1.0:
+				data['progress'] = 1.0
 			from magneto.trakt.api.trakt import TraktAPI
 			TraktAPI().scrobble.trakt_stop_scrobble(data)
 			self._trakt_active = False
@@ -450,11 +452,13 @@ class MagnetoPlayer:
 		if trakt_data:
 			self._trakt_start(trakt_data)
 		_trakt_paused = False
-		while player.isPlayingVideo():
+		try:
+			while player.isPlayingVideo():
+				if trakt_data:
+					self._trakt_update_progress(player, trakt_data)
+					_trakt_paused = self._trakt_handle_pause(player, trakt_data, _trakt_paused)
+				sleep(1000)
+		finally:
 			if trakt_data:
-				self._trakt_update_progress(player, trakt_data)
-				_trakt_paused = self._trakt_handle_pause(player, trakt_data, _trakt_paused)
-			sleep(1000)
-		if trakt_data:
-			self._trakt_stop(trakt_data)
-		self.clear_playback_properties()
+				self._trakt_stop(trakt_data)
+			self.clear_playback_properties()
