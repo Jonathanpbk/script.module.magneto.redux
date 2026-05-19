@@ -1,4 +1,4 @@
-from . import kore
+﻿from . import kore
 # logger = kore.logger
 
 get_setting, set_setting, addon_path = kore.get_setting, kore.set_setting, kore.addon_path
@@ -58,7 +58,7 @@ def quality_filter(setting):
 
 def install_json():
 	player_file = 'magneto.select.json'
-	source = 'special://home/addons/script.module.magneto/resources/'
+	source = 'special://home/addons/script.module.magneto.redux/resources/'
 	profile_path = 'special://profile/addon_data/'
 	heading = '(%s) Player Destination:' % kore.addon_info('name')
 	folders = [i for i in kore.list_dirs(profile_path)[0]]

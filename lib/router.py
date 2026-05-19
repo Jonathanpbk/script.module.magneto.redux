@@ -1,4 +1,4 @@
-"""
+﻿"""
 	Fenomscrapers Module
 """
 
@@ -39,7 +39,7 @@ elif action == 'ColorPick':
 	settings.color_pick(params)
 
 elif action == 'MagnetoSettings':
-	control.openSettings('0.0', 'script.module.magneto')
+	control.openSettings('0.0', 'script.module.magneto.redux')
 
 elif action == 'ShowChangelog':
 	from magneto.modules import changelog

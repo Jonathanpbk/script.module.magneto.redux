@@ -1,4 +1,4 @@
-import ast
+﻿import ast
 import contextlib
 import os
 import sqlite3 as database
@@ -17,7 +17,7 @@ from magneto.trakt.compat import (
     translation,
 )
 
-userdata_path = translatePath(xbmcaddon.Addon('script.module.magneto').getAddonInfo('profile'))
+userdata_path = translatePath(xbmcaddon.Addon('script.module.magneto.redux').getAddonInfo('profile'))
 databases_path = os.path.join(userdata_path, 'databases/')
 database_path_raw = os.path.join(userdata_path, 'databases')
 trakt_db = translatePath(os.path.join(database_path_raw, 'traktcache.db'))

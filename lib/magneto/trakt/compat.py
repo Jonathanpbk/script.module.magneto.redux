@@ -1,4 +1,4 @@
-"""
+﻿"""
 Compatibility shim: maps kellytook utility function names to Magneto equivalents.
 All Trakt API files import from here instead of from kellytook's lib.utils.kodi.* modules.
 """
@@ -8,7 +8,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcvfs
 
-_ADDON = xbmcaddon.Addon('script.module.magneto')
+_ADDON = xbmcaddon.Addon('script.module.magneto.redux')
 ADDON_PATH = _ADDON.getAddonInfo('path')
 ADDON_PROFILE_PATH = xbmcvfs.translatePath(_ADDON.getAddonInfo('profile'))
 ADDON_VERSION = _ADDON.getAddonInfo('version')
@@ -51,7 +51,7 @@ def set_setting(setting_id, value):
 # --- Logging ---
 
 def kodilog(message, level=xbmc.LOGINFO):
-    xbmc.log('[script.module.magneto][trakt] %s' % str(message), level)
+    xbmc.log('[script.module.magneto.redux][trakt] %s' % str(message), level)
 
 
 # --- Notifications ---

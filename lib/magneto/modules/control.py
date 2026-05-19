@@ -1,4 +1,4 @@
-"""
+﻿"""
 	Fenomscrapers Module
 """
 
@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 
 log = xbmc.log
 addon = xbmcaddon.Addon
-addonObject = addon('script.module.magneto')
+addonObject = addon('script.module.magneto.redux')
 addonInfo = addonObject.getAddonInfo
 getLangString = addonObject.getLocalizedString
 condVisibility = xbmc.getCondVisibility
@@ -81,7 +81,7 @@ def make_settings_dict(): # service runs upon a setting change
 def refresh_debugReversed(): # called from service "onSettingsChanged" to clear magneto.log if setting to reverse has been changed
 	if homeWindow.getProperty('magneto.debug.reversed') != setting('debug.reversed'):
 		homeWindow.setProperty('magneto.debug.reversed', setting('debug.reversed'))
-		execute('RunPlugin(plugin://script.module.magneto/?action=tools_clearLogFile)')
+		execute('RunPlugin(plugin://script.module.magneto.redux/?action=tools_clearLogFile)')
 
 def lang(language_id):
 	return getLangString(language_id)
@@ -100,13 +100,13 @@ def isVersionUpdate():
 	except:
 		LOGINFO = 1 # (LOGNOTICE(2) deprecated in 19, use LOGINFO(1))
 		xbmc.log('Magneto Addon Data Path Does not Exist. Creating Folder....', LOGINFO)
-		addon_folder = transPath('special://profile/addon_data/script.module.magneto')
+		addon_folder = transPath('special://profile/addon_data/script.module.magneto.redux')
 		xbmcvfs.mkdirs(addon_folder)
 	try:
 		with open(versionFile, 'r') as fh: oldVersion = fh.read()
 	except: oldVersion = '0'
 	try:
-		curVersion = addon('script.module.magneto').getAddonInfo('version')
+		curVersion = addon('script.module.magneto.redux').getAddonInfo('version')
 		if oldVersion != curVersion:
 			checkPackages()
 			with open(versionFile, 'w') as fh: fh.write(curVersion)
@@ -137,7 +137,7 @@ def clean_settings():
 			else: removed_settings.append(item)
 		content += '\n</settings>'
 		return content
-	addon_id = 'script.module.magneto'
+	addon_id = 'script.module.magneto.redux'
 	try:
 		removed_settings = []
 		active_settings = []

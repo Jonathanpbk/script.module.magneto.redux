@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<controls>
 		<control type="image">
@@ -38,7 +38,7 @@
 					<align>left</align>
 					<aligny>top</aligny>
 					<aspectratio aligny="top">keep</aspectratio>
-					<texture colordiffuse="FFCCCCCC">special://home/addons/script.module.magneto/resources/magneto_small.png</texture>
+					<texture colordiffuse="FFCCCCCC">special://home/addons/script.module.magneto.redux/resources/magneto_small.png</texture>
 				</control>
 			</control>
 			<control type="image">

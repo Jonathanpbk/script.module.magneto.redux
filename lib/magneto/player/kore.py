@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import json
 import _strptime
 from urllib.parse import urlencode
@@ -35,14 +35,14 @@ def set_setting(setting_id, value):
 	addon_object.setSetting(setting_id, value)
 
 def get_icon(image_name):
-	skin_path = 'special://home/addons/script.module.magneto/resources/skins/Default/media/%s.png'
+	skin_path = 'special://home/addons/script.module.magneto.redux/resources/skins/Default/media/%s.png'
 	return skin_path % image_name
 
 def get_addon_fanart():
 	return get_property('magneto.addon_fanart') or default_addon_fanart
 
 def build_url(url_params):
-	return 'plugin://script.module.magneto/?%s' % urlencode(url_params)
+	return 'plugin://script.module.magneto.redux/?%s' % urlencode(url_params)
 
 def add_dir(url_params, list_name, handle, iconImage='folder', fanartImage=None, isFolder=True):
 	fanart = fanartImage or get_addon_fanart()
@@ -92,7 +92,7 @@ def set_property(prop, value):
 def clear_property(prop):
 	return window.clearProperty(prop)
 
-def addon(addon_id='script.module.magneto'):
+def addon(addon_id='script.module.magneto.redux'):
 	return xbmcaddon.Addon(id=addon_id)
 
 def addon_installed(addon_id):

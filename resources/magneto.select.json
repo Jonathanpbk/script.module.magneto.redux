@@ -1,6 +1,6 @@
-{
+﻿{
   "name": "Magneto (AIOStreams)",
-  "plugin": "script.module.magneto",
+  "plugin": "script.module.magneto.redux",
   "api_language": "en-US",
   "priority": 100,
   "is_resolvable": "false",
@@ -8,6 +8,6 @@
     "search_movie": ["imdb"],
     "search_episode": ["imdb", "season", "episode"]
   },
-  "play_movie": "executebuiltin://RunPlugin(plugin://script.module.magneto/?action=MediaPlay&mediatype=movie&imdb_id={imdb}&tmdb_id={tmdb})",
-  "play_episode": "executebuiltin://RunPlugin(plugin://script.module.magneto/?action=MediaPlay&mediatype=episode&imdb_id={imdb}&tmdb_id={tmdb}&season={season}&episode={episode})"
+  "play_movie": "executebuiltin://RunPlugin(plugin://script.module.magneto.redux/?action=MediaPlay&mediatype=movie&imdb_id={imdb}&tmdb_id={tmdb})",
+  "play_episode": "executebuiltin://RunPlugin(plugin://script.module.magneto.redux/?action=MediaPlay&mediatype=episode&imdb_id={imdb}&tmdb_id={tmdb}&season={season}&episode={episode})"
 }

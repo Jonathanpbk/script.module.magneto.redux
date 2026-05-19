@@ -1,4 +1,4 @@
-"""
+﻿"""
 	Fenomscrapers Module
 """
 
@@ -63,14 +63,14 @@ def log(msg, caller=None, level=LOGINFO):
 		import traceback
 		traceback.print_exc()
 		import xbmc
-		xbmc.log('[ script.module.magneto ] log_utils.log() Logging Failure: %s' % (e), LOGERROR)
+		xbmc.log('[ script.module.magneto.redux ] log_utils.log() Logging Failure: %s' % (e), LOGERROR)
 
 def error(message=None, exception=True):
 	try:
 		import sys
 		if exception:
 			type, value, traceback = sys.exc_info()
-			addon = 'script.module.magneto'
+			addon = 'script.module.magneto.redux'
 			filename = (traceback.tb_frame.f_code.co_filename)
 			filename = filename.split(addon)[1]
 			name = traceback.tb_frame.f_code.co_name
@@ -88,7 +88,7 @@ def error(message=None, exception=True):
 		log(msg=message, caller=caller, level=LOGERROR)
 	except Exception as e:
 		import xbmc
-		xbmc.log('[ script.module.magneto ] log_utils.error() Logging Failure: %s' % (e), LOGERROR)
+		xbmc.log('[ script.module.magneto.redux ] log_utils.error() Logging Failure: %s' % (e), LOGERROR)
 
 def clear_logFile():
 	cleared = False
@@ -105,7 +105,7 @@ def clear_logFile():
 		cleared = True
 	except Exception as e:
 		import xbmc
-		xbmc.log('[ script.module.magneto ] log_utils.clear_logFile() Failure: %s' % (e), LOGERROR)
+		xbmc.log('[ script.module.magneto.redux ] log_utils.clear_logFile() Failure: %s' % (e), LOGERROR)
 		cleared = False
 	return cleared
 
