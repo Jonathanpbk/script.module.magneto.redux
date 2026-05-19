@@ -132,11 +132,11 @@ elif action == 'healthCheck':
 
 elif action == 'trakt_auth':
 	from magneto.trakt.api.trakt import TraktAPI
-	TraktAPI().auth.authenticate()
+	TraktAPI().auth.trakt_authenticate()
 
 elif action == 'trakt_auth_revoke':
 	from magneto.trakt.api.trakt import TraktAPI
-	TraktAPI().auth.revoke_auth()
+	TraktAPI().auth.trakt_revoke_authentication()
 
 elif action == 'clear_trakt_cache':
 	from magneto.trakt.api.trakt_cache import (
