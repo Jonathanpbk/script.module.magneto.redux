@@ -2,6 +2,8 @@
 	Fenomscrapers Module
 """
 
+import threading
+
 import xbmc
 from magneto.modules import control, log_utils
 window = control.homeWindow
@@ -51,6 +53,16 @@ class CheckUndesirablesDatabase:
 			traceback.print_exc()
 		return xbmc.log('[ script.module.magneto ]  Finished "CheckUndesirablesDatabase" Service', LOGINFO)
 
+def _start_trakt_sync():
+	try:
+		from magneto.trakt.sync import TraktSyncService
+		t = threading.Thread(target=TraktSyncService().run, daemon=True)
+		t.start()
+	except Exception:
+		import traceback
+		traceback.print_exc()
+
+
 def main():
 	while not control.monitor.abortRequested():
 		xbmc.log('[ script.module.magneto ]  Service Started', LOGINFO)
@@ -59,6 +71,7 @@ def main():
 		if control.isVersionUpdate():
 			control.clean_settings()
 			xbmc.log('[ script.module.magneto ]  Settings file cleaned complete', LOGINFO)
+		_start_trakt_sync()
 		break
 	SettingsMonitor().waitForAbort()
 	xbmc.log('[ script.module.magneto ]  Service Stopped', LOGINFO)

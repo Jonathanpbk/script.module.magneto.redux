@@ -129,3 +129,29 @@ elif action == 'tools_uploadLogFile':
 elif action == 'healthCheck':
 	from magneto.modules.health import magneto
 	magneto()
+
+elif action == 'trakt_auth':
+	from magneto.trakt.api.trakt import TraktAPI
+	TraktAPI().auth.authenticate()
+
+elif action == 'trakt_auth_revoke':
+	from magneto.trakt.api.trakt import TraktAPI
+	TraktAPI().auth.revoke_auth()
+
+elif action == 'clear_trakt_cache':
+	from magneto.trakt.api.trakt_cache import (
+		clear_trakt_calendar, clear_trakt_favorites, clear_trakt_hidden_data,
+		clear_trakt_list_contents_data, clear_trakt_list_data, clear_trakt_watchlist,
+		trakt_cache,
+	)
+	clear_trakt_watchlist()
+	clear_trakt_favorites()
+	clear_trakt_calendar()
+	clear_trakt_list_data('my_lists')
+	clear_trakt_list_data('liked_lists')
+	clear_trakt_list_contents_data('my_lists')
+	clear_trakt_list_contents_data('liked_lists')
+	clear_trakt_hidden_data('movies')
+	clear_trakt_hidden_data('shows')
+	trakt_cache.clear_all()
+	control.notification(message='Trakt Cache Cleared')

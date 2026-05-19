@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import segno; print\\(segno.__file__\\)\")",
+      "Bash(python -c \"import qrcode; print\\(qrcode.__file__\\)\")",
+      "Bash(py -3 -c \"import segno; print\\(segno.__file__\\)\")",
+      "Bash(py -3 -c \"import qrcode; print\\(qrcode.__file__\\)\")"
+    ]
+  }
+}

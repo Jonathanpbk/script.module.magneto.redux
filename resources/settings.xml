@@ -103,4 +103,22 @@
     <setting id="aio.password" type="text" label="Password" default="" />
 </category>
 
+
+<category label="Trakt"> <!-- Trakt -->
+    <setting id="trakt_enabled" type="bool" label="Enable Trakt" default="false" />
+    <setting id="is_trakt_auth" type="bool" label="" default="false" visible="false" />
+    <setting label="API Credentials" type="lsep" />
+    <setting id="trakt_client" type="text" label="Client ID" default="" />
+    <setting id="trakt_secret" type="text" label="Client Secret" default="" />
+    <setting label="Authentication" type="lsep" />
+    <setting id="trakt_user" type="text" label="Authenticated User" default="" enable="false" />
+    <setting type="action" label="Authorise Trakt" action="RunPlugin(plugin://script.module.magneto/?action=trakt_auth)" />
+    <setting type="action" label="Revoke Trakt Authorisation" action="RunPlugin(plugin://script.module.magneto/?action=trakt_auth_revoke)" />
+    <setting label="Scrobbling" type="lsep" />
+    <setting id="trakt_scrobbling_enabled" type="bool" label="Scrobble Playback" default="true" />
+    <setting id="trakt_sync_interval" type="number" label="Sync Interval (minutes)" default="15" />
+    <setting type="sep" />
+    <setting type="action" label="Clear Trakt Cache" action="RunPlugin(plugin://script.module.magneto/?action=clear_trakt_cache)" />
+</category>
+
 </settings>

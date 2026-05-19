@@ -40,6 +40,7 @@ class MagnetoPlayer:
 		self.sources, self.remove_scrapers = [], ['external']
 		self.threads, self.providers, self.internal_scraper_names = [], [], []
 		self.clear_properties, self.progress_dialog = True, None
+		self._trakt_active = False
 		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
 		self.count_tuple = (
 			('sources_4k', '2160p', self._quality_length), ('sources_4k', '4K', self._quality_length),
@@ -342,6 +343,74 @@ class MagnetoPlayer:
 		else: url = item.get('url')
 		return url
 
+	def _build_trakt_data(self):
+		try:
+			from magneto.trakt.api.trakt_utils import is_trakt_auth
+			if get_setting('trakt_enabled') != 'true': return None
+			if not is_trakt_auth(): return None
+			if get_setting('trakt_scrobbling_enabled') != 'true': return None
+			if not self.tmdb_id: return None
+			ids = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id}
+			data = {
+				'ids': ids,
+				'mode': 'tv' if self.mediatype == 'episode' else 'movie',
+				'title': self.meta.get('title', ''),
+				'progress': 0.0,
+			}
+			if self.mediatype == 'episode':
+				ids['tvdb_id'] = self.meta.get('tvdb_id')
+				data['tv_data'] = {'season': self.season, 'episode': self.episode}
+			return data
+		except Exception:
+			return None
+
+	def _trakt_get_resume_position(self, data):
+		try:
+			from magneto.trakt.api.trakt import TraktAPI
+			return TraktAPI().scrobble.trakt_get_last_tracked_position(data)
+		except Exception:
+			return 0
+
+	def _trakt_start(self, data):
+		try:
+			from magneto.trakt.api.trakt import TraktAPI
+			TraktAPI().scrobble.trakt_start_scrobble(data)
+			self._trakt_active = True
+		except Exception as e:
+			logger('trakt_start', str(e))
+
+	def _trakt_update_progress(self, player, data):
+		try:
+			total = player.getTotalTime()
+			current = player.getTime()
+			if total and total > 0:
+				data['progress'] = round(current / total * 100, 1)
+		except Exception:
+			pass
+
+	def _trakt_handle_pause(self, player, data, was_paused):
+		try:
+			import xbmc
+			is_paused = bool(xbmc.getCondVisibility('Player.Paused'))
+			if is_paused and not was_paused:
+				from magneto.trakt.api.trakt import TraktAPI
+				TraktAPI().scrobble.trakt_pause_scrobble(data)
+			elif was_paused and not is_paused:
+				from magneto.trakt.api.trakt import TraktAPI
+				TraktAPI().scrobble.trakt_start_scrobble(data)
+			return is_paused
+		except Exception:
+			return was_paused
+
+	def _trakt_stop(self, data):
+		try:
+			if not self._trakt_active: return
+			from magneto.trakt.api.trakt import TraktAPI
+			TraktAPI().scrobble.trakt_stop_scrobble(data)
+			self._trakt_active = False
+		except Exception as e:
+			logger('trakt_stop', str(e))
+
 	def play_cancelled(self):
 #		kore.xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, listitem=make_listitem())
 		self._kill_progress_dialog()
@@ -370,7 +439,22 @@ class MagnetoPlayer:
 		listitem.setLabel(self.meta.get('title'))
 		listitem.setPath(self.url)
 		listitem.setContentLookup(False)
+		trakt_data = self._build_trakt_data()
+		if trakt_data:
+			last_pos = self._trakt_get_resume_position(trakt_data)
+			if last_pos > 0:
+				listitem.setProperty('StartPercent', str(last_pos))
 		player = videoplayer(self.url, listitem, self._kill_progress_dialog)
 		self.set_playback_properties()
-		while player.isPlayingVideo(): sleep(1000)
+		self._trakt_active = False
+		if trakt_data:
+			self._trakt_start(trakt_data)
+		_trakt_paused = False
+		while player.isPlayingVideo():
+			if trakt_data:
+				self._trakt_update_progress(player, trakt_data)
+				_trakt_paused = self._trakt_handle_pause(player, trakt_data, _trakt_paused)
+			sleep(1000)
+		if trakt_data:
+			self._trakt_stop(trakt_data)
 		self.clear_playback_properties()
