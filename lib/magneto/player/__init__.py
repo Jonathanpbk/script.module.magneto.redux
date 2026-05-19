@@ -353,7 +353,7 @@ class MagnetoPlayer:
 			ids = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id}
 			data = {
 				'ids': ids,
-				'mode': 'tv' if self.mediatype == 'episode' else 'movie',
+				'mode': 'tv' if self.mediatype == 'episode' else 'movies',
 				'title': self.meta.get('title', ''),
 				'progress': 0.0,
 			}
