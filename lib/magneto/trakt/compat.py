@@ -3,6 +3,8 @@ Compatibility shim: maps kellytook utility function names to Magneto equivalents
 All Trakt API files import from here instead of from kellytook's lib.utils.kodi.* modules.
 """
 
+import json
+import os
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -17,6 +19,35 @@ EMPTY_USER = 'unknown_user'
 
 _window = xbmcgui.Window(10000)
 
+_TRAKT_CRED_FILE = os.path.join(ADDON_PROFILE_PATH, 'trakt_auth.json')
+_TRAKT_TOKEN_KEYS = frozenset(('trakt_token', 'trakt_refresh', 'trakt_expires'))
+
+
+def _save_trakt_credentials():
+    try:
+        data = {k: _window.getProperty(k) for k in _TRAKT_TOKEN_KEYS}
+        if data.get('trakt_token'):
+            with open(_TRAKT_CRED_FILE, 'w') as f:
+                json.dump(data, f)
+        elif os.path.exists(_TRAKT_CRED_FILE):
+            os.remove(_TRAKT_CRED_FILE)
+    except Exception:
+        pass
+
+
+def load_trakt_credentials():
+    try:
+        if not os.path.exists(_TRAKT_CRED_FILE):
+            return
+        with open(_TRAKT_CRED_FILE, 'r') as f:
+            data = json.load(f)
+        for k in _TRAKT_TOKEN_KEYS:
+            val = data.get(k)
+            if val:
+                _window.setProperty(k, str(val))
+    except Exception:
+        pass
+
 
 # --- Window properties (used to store auth tokens in RAM) ---
 
@@ -24,7 +55,9 @@ def get_property(prop):
     return _window.getProperty(prop)
 
 def set_property(prop, value):
-    return _window.setProperty(prop, str(value) if value is not None else '')
+    _window.setProperty(prop, str(value) if value is not None else '')
+    if prop in _TRAKT_TOKEN_KEYS:
+        _save_trakt_credentials()
 
 def clear_property(prop):
     return _window.clearProperty(prop)

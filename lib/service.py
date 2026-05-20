@@ -63,6 +63,16 @@ def _start_trakt_sync():
 		traceback.print_exc()
 
 
+def _load_trakt_credentials():
+	try:
+		from magneto.trakt.compat import load_trakt_credentials
+		load_trakt_credentials()
+		xbmc.log('[ script.module.magneto.redux ]  Trakt credentials loaded', LOGINFO)
+	except Exception:
+		import traceback
+		traceback.print_exc()
+
+
 def main():
 	while not control.monitor.abortRequested():
 		xbmc.log('[ script.module.magneto.redux ]  Service Started', LOGINFO)
@@ -71,6 +81,7 @@ def main():
 		if control.isVersionUpdate():
 			control.clean_settings()
 			xbmc.log('[ script.module.magneto.redux ]  Settings file cleaned complete', LOGINFO)
+		_load_trakt_credentials()
 		_start_trakt_sync()
 		break
 	SettingsMonitor().waitForAbort()
