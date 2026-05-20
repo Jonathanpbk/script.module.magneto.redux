@@ -20,7 +20,8 @@ EMPTY_USER = 'unknown_user'
 _window = xbmcgui.Window(10000)
 
 _TRAKT_CRED_FILE = os.path.join(ADDON_PROFILE_PATH, 'trakt_auth.json')
-_TRAKT_TOKEN_KEYS = frozenset(('trakt_token', 'trakt_refresh', 'trakt_expires'))
+# trakt_user is mirrored to a window property so _save_trakt_credentials can read it uniformly
+_TRAKT_TOKEN_KEYS = frozenset(('trakt_token', 'trakt_refresh', 'trakt_expires', 'trakt_user'))
 
 
 def _save_trakt_credentials():
@@ -45,6 +46,12 @@ def load_trakt_credentials():
             val = data.get(k)
             if val:
                 _window.setProperty(k, str(val))
+        # Restore username to addon settings so the settings UI shows it correctly.
+        # Use setSetting directly (not the wrapper) to avoid re-triggering _save_trakt_credentials.
+        trakt_user = data.get('trakt_user', '')
+        if trakt_user and trakt_user != EMPTY_USER:
+            from magneto.modules.control import setSetting
+            setSetting('trakt_user', trakt_user)
     except Exception:
         pass
 
@@ -78,7 +85,12 @@ def get_setting(setting_id, fallback=None):
 
 def set_setting(setting_id, value):
     from magneto.modules.control import setSetting
-    return setSetting(setting_id, str(value))
+    setSetting(setting_id, str(value))
+    if setting_id == 'trakt_user':
+        # Mirror to a window property so _save_trakt_credentials picks it up,
+        # then re-save the JSON to keep username in sync with token state.
+        _window.setProperty('trakt_user', str(value) if value else '')
+        _save_trakt_credentials()
 
 
 # --- Logging ---

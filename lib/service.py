@@ -65,8 +65,22 @@ def _start_trakt_sync():
 
 def _load_trakt_credentials():
 	try:
-		from magneto.trakt.compat import load_trakt_credentials
+		from magneto.trakt.compat import load_trakt_credentials, get_property, trakt_client, EMPTY_USER
 		load_trakt_credentials()
+		# If token is present but username is missing (e.g. old trakt_auth.json before this fix),
+		# fetch the username from the Trakt API. Guard on client key to avoid a startup notification.
+		token = get_property('trakt_token')
+		user = get_property('trakt_user')
+		if token and (not user or user == EMPTY_USER) and trakt_client():
+			try:
+				from magneto.trakt.api.trakt import TraktAPI
+				from magneto.trakt.compat import set_setting as trakt_set_setting
+				result = TraktAPI().auth.call_trakt('users/me')
+				if result and isinstance(result, dict):
+					trakt_set_setting('trakt_user', str(result['username']))
+					xbmc.log('[ script.module.magneto.redux ]  Trakt username fetched: %s' % result['username'], LOGINFO)
+			except Exception:
+				pass
 		xbmc.log('[ script.module.magneto.redux ]  Trakt credentials loaded', LOGINFO)
 	except Exception:
 		import traceback
