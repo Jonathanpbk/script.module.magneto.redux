@@ -413,6 +413,15 @@ class MagnetoPlayer:
 		except Exception as e:
 			logger('trakt_stop', str(e))
 
+	def _tmdbhelper_invalidate_progress(self):
+		try:
+			import time
+			import xbmc
+			time.sleep(5)
+			xbmc.executebuiltin('RunScript(plugin.video.themoviedb.helper,invalidate_trakt_sync=watchedprogress,notification=,sync=)')
+		except Exception:
+			pass
+
 	def play_cancelled(self):
 #		kore.xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, listitem=make_listitem())
 		self._kill_progress_dialog()
@@ -459,6 +468,10 @@ class MagnetoPlayer:
 					_trakt_paused = self._trakt_handle_pause(player, trakt_data, _trakt_paused)
 				sleep(1000)
 		finally:
+			_did_scrobble = self._trakt_active
 			if trakt_data:
 				self._trakt_stop(trakt_data)
+			if _did_scrobble and get_setting('trakt_tmdb_sync') == 'true':
+				from threading import Thread
+				Thread(target=self._tmdbhelper_invalidate_progress, daemon=True).start()
 			self.clear_playback_properties()

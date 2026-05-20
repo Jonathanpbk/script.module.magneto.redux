@@ -117,6 +117,7 @@
     <setting label="Scrobbling" type="lsep" />
     <setting id="trakt_scrobbling_enabled" type="bool" label="Scrobble Playback" default="true" />
     <setting id="trakt_sync_interval" type="number" label="Sync Interval (minutes)" default="15" />
+    <setting id="trakt_tmdb_sync" type="bool" label="Clear TMDbHelper progress cache after playback" default="false" />
     <setting type="sep" />
     <setting type="action" label="Clear Trakt Cache" action="RunPlugin(plugin://script.module.magneto.redux/?action=clear_trakt_cache)" />
 </category>

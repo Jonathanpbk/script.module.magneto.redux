@@ -4,7 +4,9 @@
       "Bash(python -c \"import segno; print\\(segno.__file__\\)\")",
       "Bash(python -c \"import qrcode; print\\(qrcode.__file__\\)\")",
       "Bash(py -3 -c \"import segno; print\\(segno.__file__\\)\")",
-      "Bash(py -3 -c \"import qrcode; print\\(qrcode.__file__\\)\")"
+      "Bash(py -3 -c \"import qrcode; print\\(qrcode.__file__\\)\")",
+      "Read(//c/Users/J/AppData/Roaming/Kodi/addons/plugin.video.themoviedb.helper/**)",
+      "Bash(findstr /i \"setting\\\\|menu\")"
     ]
   }
 }
