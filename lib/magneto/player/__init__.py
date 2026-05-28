@@ -389,18 +389,18 @@ class MagnetoPlayer:
 			pass
 
 	def _trakt_handle_pause(self, player, data, was_paused):
+		import xbmc
+		is_paused = bool(xbmc.getCondVisibility('Player.Paused'))
 		try:
-			import xbmc
-			is_paused = bool(xbmc.getCondVisibility('Player.Paused'))
 			if is_paused and not was_paused:
 				from magneto.trakt.api.trakt import TraktAPI
 				TraktAPI().scrobble.trakt_pause_scrobble(data)
 			elif was_paused and not is_paused:
 				from magneto.trakt.api.trakt import TraktAPI
 				TraktAPI().scrobble.trakt_start_scrobble(data)
-			return is_paused
 		except Exception:
-			return was_paused
+			pass
+		return is_paused
 
 	def _trakt_stop(self, data):
 		try:

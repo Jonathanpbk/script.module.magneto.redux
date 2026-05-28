@@ -126,7 +126,8 @@ class TraktBase:
         except requests.HTTPError as error:
             status_code = response.status_code
             if status_code == 401:
-                self._handle_unauthorized()
+                if with_auth:
+                    self._handle_unauthorized()
                 return []
 
             error_messages = {
@@ -1479,6 +1480,7 @@ class TraktScrobble(TraktBase):
                 progress = float(progress)
             except ValueError:
                 progress = 0.0
+        progress = max(0.0, min(100.0, progress))
 
         payload: Dict[str, Any] = {
             'progress': progress,
